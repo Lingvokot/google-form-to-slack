@@ -15,7 +15,7 @@ function Initialize() {
 function CreateMessage(e){
   try {
     var spreadsheet, columns;
-    var my_message;
+    var my_message = "";
  
     //fetch the column names
     spreadsheet = SpreadsheetApp.getActiveSheet();
@@ -27,6 +27,8 @@ function CreateMessage(e){
       var val = e.namedValues[key] ? e.namedValues[key].toString() : "";
       if (val !== "") {
         my_message +=key + ' :: ' + val + '\n';
+      } else {
+        my_message +=key + ' :: ' + "<null>" + '\n';
       }
     }
     SendSlackMessage(my_message);
@@ -41,32 +43,25 @@ function TestSlack(){
 }
  
 function SendSlackMessage(message){
-var url = "https://slack.com/api/chat.postMessage";
+var url = "FULLFILL IT";
    
   var payload =
       {
-        "token" : "CHANGE TO YOU KEY",
         "as_user" :"false",
-        "text" : "New Request\n" + message,
-        "channel" : "#YOUR-CHANNEL",
-        "attachments" : [{"pretext": "Notification", "text": message}],
+        "text" : "New form submit",
+        "attachments" : [{"text": message}],
         "type" : "post",
       };
    
   var options =
       {
-        "method"  : "POST",
-        "payload" : payload,   
-        "followRedirects" : false,
-        "muteHttpExceptions": true
+        "method"  : "post",
+        "payload" : 'payload=' + JSON.stringify(payload),   
+//        "followRedirects" : false,
+//        "muteHttpExceptions": true
       };
    
   var result = UrlFetchApp.fetch(url, options);
-   
-  if (result.getResponseCode() == 200) {
-     
-    var params = JSON.parse(result.getContentText());
-     
-    Logger.log(params);
-  }
+  
+  Logger.log(result);
 }
